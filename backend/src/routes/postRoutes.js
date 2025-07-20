@@ -4,10 +4,9 @@ import {
   deletePost,
   getAllPosts,
   updatePost,
-} from "../../controllers/postController.js";
+} from "../controllers/postController.js";
 
 const router = express.Router();
-const PORT = process.env.PORT || 5000;
 
 // Routes for post /api/posts
 

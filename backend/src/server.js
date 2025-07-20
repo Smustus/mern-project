@@ -15,6 +15,6 @@ app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
 
-router.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("Home route");
 });
