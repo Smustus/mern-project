@@ -13,6 +13,18 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
+export const getPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await Post.findById(id);
+    res.status(200).json(data);
+    /*  res.status(200).json({ message: "Fetched" }); */
+  } catch (error) {
+    console.error("Error fetching all posts: ", error);
+    res.status(500).json({ message: "Error fetching all posts" });
+  }
+};
+
 export const createPost = async (req, res) => {
   /*   console.log("Post request successful");
   res.status(201).send("Created successfully"); */
