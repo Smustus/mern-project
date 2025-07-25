@@ -2,9 +2,9 @@ import Post from "../model/schema.js";
 
 // /api/posts
 
-export const getAllPosts = async (req, res) => {
+export const getAllPosts = async (_, res) => {
   try {
-    const data = await Post.find();
+    const data = await Post.find().sort({ createdAt: -1 });
     res.status(200).json(data);
     /*  res.status(200).json({ message: "Fetched" }); */
   } catch (error) {
