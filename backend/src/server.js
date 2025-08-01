@@ -3,14 +3,20 @@ import postRoutes from "./routes/postRoutes.js";
 import dotenv from "dotenv";
 import { connectToMongoDB } from "./config/mongodb.js";
 import { rateLimiter } from "./middleware/rateLimiter.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(rateLimiter); // Rate limiting middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend URL
+  })
+); // Enable CORS for all routes
 app.use("/api/posts", postRoutes);
 
 connectToMongoDB()
