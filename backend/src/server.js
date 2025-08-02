@@ -11,12 +11,12 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 app.use(express.json()); // Middleware to parse JSON bodies
-app.use(rateLimiter); // Rate limiting middleware
 app.use(
   cors({
     origin: "http://localhost:5173", // frontend URL
   })
 ); // Enable CORS for all routes
+app.use(rateLimiter); // Rate limiting middleware
 app.use("/api/posts", postRoutes);
 
 connectToMongoDB()

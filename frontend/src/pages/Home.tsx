@@ -1,23 +1,28 @@
 import { useLoaderData } from "react-router";
 import useAuth from "../utility/useAuth";
 import { useEffect } from "react";
+import PostCard from "../components/PostCard";
 
 const Home = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const posts = useLoaderData() as any[];
+  const posts = useLoaderData() as Post[];
   const { user } = useAuth();
 
   useEffect(() => {
     console.log(posts);
   }, [posts]);
 
+  if (!posts) return <div>Loading...</div>;
+  if (posts.length === 0) return <div>No posts found.</div>;
+
   return (
     <>
       <h2>Welcome, {user}</h2>
       {posts && posts.length > 0 && (
         <ul className="list-disc pl-6 mt-4">
-          {posts.map((post, i) => (
-            <li key={i}>{post.title}</li>
+          {posts.map((post) => (
+            <li key={post._id}>
+              <PostCard {...post} />
+            </li>
           ))}
         </ul>
       )}

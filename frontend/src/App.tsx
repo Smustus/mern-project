@@ -8,7 +8,7 @@ const App = () => {
   return (
     <AuthProvider>
       <div className="wrapper">
-        {/* Navbar */}
+        {/* Header / Navbar */}
         <header className="header">
           <h1 className="">App Header</h1>
           <button onClick={() => toast.success("Good job!")}>Toast test</button>
