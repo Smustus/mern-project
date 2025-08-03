@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { AuthProvider } from "./utility/AuthProvider";
 import { Outlet } from "react-router";
 import "./index.css";

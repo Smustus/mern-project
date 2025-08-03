@@ -1,0 +1,33 @@
+.rate-limit-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 2rem;
+  background-color: #ffebeb;
+  border: 1px solid #ffcccc;
+  border-radius: 0.75rem;
+  margin: 2rem auto;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Inter", sans-serif;
+  text-align: center;
+}
+
+.rate-limit-message {
+  color: #cc0000;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .rate-limit-container {
+    margin: 1rem auto;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+  }
+  .rate-limit-message {
+    font-size: 1.2rem;
+  }
+}
