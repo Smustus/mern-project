@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { AuthProvider } from "./utility/AuthProvider";
 import { Outlet } from "react-router";
 import "./index.css";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 
 const App = () => {
   return (
@@ -11,7 +11,6 @@ const App = () => {
         {/* Header / Navbar */}
         <header className="header">
           <h1 className="">App Header</h1>
-          <button onClick={() => toast.success("Good job!")}>Toast test</button>
           <NavBar />
         </header>
 
