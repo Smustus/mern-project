@@ -13,7 +13,7 @@ const PostCard: React.FC<Post> = (post) => {
   };
   return (
     <article>
-      <h2>PostCard</h2>
+      <h2>Post</h2>
       <h2>{post.title}</h2>
       <Link to={`/post/${post._id}`}>LINK</Link>
       <p>{new Date(post.createdAt).toLocaleDateString()}</p>
