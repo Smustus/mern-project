@@ -1,15 +1,21 @@
 import React, { useState, type FormEvent } from "react";
+import useAuth from "../utility/useAuth";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const CreatePost: React.FC = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState<Partial<Post>>({
     title: "",
     slug: "",
     published: false,
-    author: "",
+    author: user || "",
     content: "",
     tags: [],
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -29,15 +35,25 @@ const CreatePost: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay
-    /* try {
-      // TODO: Send formData backend
-      console.log("Post submitted successfully: ", formData);
+    /*     await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay */
+    try {
+      setIsLoading(true);
+      await fetch(`http://localhost:5001/api/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      toast.success("Post created successfully!");
+      console.log("Post created successfully: ", formData);
+      navigate("/");
     } catch (error) {
+      toast.error("Creation failed!");
       console.error("Error adding post: ", error);
     } finally {
       setIsLoading(false);
-    } */
+    }
   };
 
   return (
@@ -69,17 +85,6 @@ const CreatePost: React.FC = () => {
         <br />
 
         <label>
-          Author:
-          <input
-            type="text"
-            name="author"
-            value={formData.author || ""}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
           Content:
           <textarea
             name="content"
@@ -97,17 +102,6 @@ const CreatePost: React.FC = () => {
             type="text"
             name="tags"
             value={formData.tags?.join(", ") || ""}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Published:
-          <input
-            type="checkbox"
-            name="published"
-            checked={formData.published || false}
             onChange={handleChange}
           />
         </label>
