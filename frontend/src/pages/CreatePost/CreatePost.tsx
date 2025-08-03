@@ -1,7 +1,7 @@
 import React, { useState, type FormEvent } from "react";
-import useAuth from "../utility/useAuth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import useAuth from "../../utility/useAuth";
 
 const CreatePost: React.FC = () => {
   const { user } = useAuth();
@@ -45,7 +45,7 @@ const CreatePost: React.FC = () => {
         },
         body: JSON.stringify(formData),
       });
-      toast.success("Post created successfully!");
+      toast.success("Post created!");
       console.log("Post created successfully: ", formData);
       navigate("/");
     } catch (error) {

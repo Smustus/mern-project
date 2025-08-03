@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router";
-import useAuth from "../utility/useAuth";
 import { useEffect } from "react";
-import PostCard from "../components/PostCard";
+import useAuth from "../../utility/useAuth";
+import PostCard from "../../components/PostCard";
 
 const Home = () => {
   const posts = useLoaderData() as Post[];
