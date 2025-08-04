@@ -1,0 +1,143 @@
+.create-post-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-form .form-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.post-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+  font-size: 1em;
+}
+
+.post-form input[type="text"],
+.post-form textarea {
+  width: 100%;
+  padding: 12px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-form input[type="text"]:focus,
+.post-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.post-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.post-form .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.post-form input[type="checkbox"] {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  accent-color: #007bff; /* Custom color for checkbox */
+  cursor: pointer;
+}
+
+.post-form .checkbox-group label {
+  margin-bottom: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .create-post-container {
+    padding: 20px;
+    margin: 1rem auto;
+  }
+
+  h2 {
+    font-size: 1.8em;
+  }
+
+  .post-form input[type="text"],
+  .post-form textarea {
+    width: calc(100% - 16px); /* Adjust padding for smaller screens */
+    padding: 10px 8px;
+  }
+
+  .submit-button {
+    padding: 12px 15px;
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .create-post-container {
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  .post-form label {
+    font-size: 0.95em;
+  }
+
+  .post-form input[type="text"],
+  .post-form textarea {
+    font-size: 0.9em;
+  }
+}

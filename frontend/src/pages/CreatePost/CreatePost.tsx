@@ -2,6 +2,9 @@ import React, { useState, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import useAuth from "../../utility/useAuth";
+import { createPost } from "../../api/posts/fetchPost";
+import PostForm from "../../components/PostForm/PostForm";
+import "./CreatePost.css";
 
 const CreatePost: React.FC = () => {
   const { user } = useAuth();
@@ -34,17 +37,9 @@ const CreatePost: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    /*     await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay */
     try {
       setIsLoading(true);
-      await fetch(`http://localhost:5001/api/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      await createPost(formData);
       toast.success("Post created!");
       console.log("Post created successfully: ", formData);
       navigate("/");
@@ -58,59 +53,13 @@ const CreatePost: React.FC = () => {
 
   return (
     <div style={{ maxWidth: "600px", margin: "2rem auto" }}>
-      <h2>Create Post</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            name="title"
-            value={formData.title || ""}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-
-        <label>
-          Slug:
-          <input
-            type="text"
-            name="slug"
-            value={formData.slug || ""}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-
-        <label>
-          Content:
-          <textarea
-            name="content"
-            value={formData.content || ""}
-            onChange={handleChange}
-            required
-            rows={5}
-          />
-        </label>
-        <br />
-
-        <label>
-          Tags (comma-separated):
-          <input
-            type="text"
-            name="tags"
-            value={formData.tags?.join(", ") || ""}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "...creating post" : "Create Post"}
-        </button>
-      </form>
+      <h2 className="header-title">Create Post</h2>
+      <PostForm
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
