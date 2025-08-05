@@ -1,8 +1,13 @@
 import toast from "react-hot-toast";
 
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5001/api"
+    : `${window.location.origin}/api`;
+
 export const deletePost = async (id: string) => {
   try {
-    const res = await fetch(`http://localhost:5001/api/posts/${id}`, {
+    const res = await fetch(`${BASE_URL}/posts/${id}`, {
       method: "DELETE",
     });
     if (!res.ok) throw new Error("Failed to delete post");
@@ -16,7 +21,7 @@ export const deletePost = async (id: string) => {
 
 export const createPost = async (formData: Partial<Post>): Promise<Post> => {
   try {
-    const response = await fetch(`http://localhost:5001/api/posts`, {
+    const response = await fetch(`${BASE_URL}/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +46,7 @@ export const updatePost = async (
   updates: Partial<Post>
 ): Promise<Post> => {
   try {
-    const response = await fetch(`http://localhost:5001/api/posts/${postId}`, {
+    const response = await fetch(`${BASE_URL}/posts/${postId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -76,16 +81,13 @@ export const addComment = async (
   content: string
 ): Promise<Comment[]> => {
   try {
-    const response = await fetch(
-      `http://localhost:5001/api/posts/${postId}/comment`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, title, content }),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/posts/${postId}/comment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, title, content }),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
