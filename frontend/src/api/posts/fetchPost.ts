@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 const BASE_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:5001/api"
-    : `${window.location.origin}/api`;
+    : `https://mern-test-project-ojk5.onrender.com/api`;
 
 export const deletePost = async (id: string) => {
   try {
