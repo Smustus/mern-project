@@ -5,6 +5,11 @@ import Home from "../pages/Home/Home";
 import CreatePost from "../pages/CreatePost/CreatePost";
 import PostDetails from "../pages/PostDetails/PostDetails";
 
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5001/api"
+    : `https://mern-test-project-ojk5.onrender.com/api`;
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,7 +20,7 @@ const router = createBrowserRouter([
         Component: Home,
         loader: async () => {
           try {
-            const res = await fetch("http://localhost:5001/api/posts");
+            const res = await fetch(`${BASE_URL}/posts`);
             if (!res.ok) throw new Error("Failed to fetch posts");
             return res.json();
           } catch (error) {
@@ -45,9 +50,7 @@ const router = createBrowserRouter([
         Component: PostDetails,
         loader: async ({ params }) => {
           try {
-            const res = await fetch(
-              `http://localhost:5001/api/posts/${params.id}`
-            ); // id
+            const res = await fetch(`${BASE_URL}/posts/${params.id}`); // id
             if (!res.ok) throw new Error("Failed to fetch posts");
             return res.json();
           } catch (error) {
