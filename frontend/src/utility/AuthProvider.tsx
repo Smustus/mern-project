@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import AuthContext from "../context/AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

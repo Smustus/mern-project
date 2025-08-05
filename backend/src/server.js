@@ -4,20 +4,32 @@ import dotenv from "dotenv";
 import { connectToMongoDB } from "./config/mongodb.js";
 import { rateLimiter } from "./middleware/rateLimiter.js";
 import cors from "cors";
+import path from "path";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve();
 
 app.use(express.json()); // Middleware to parse JSON bodies
-app.use(
-  cors({
-    origin: "http://localhost:5173", // frontend URL
-  })
-); // Enable CORS for all routes
+if (process.env.NODE_ENV === "development") {
+  app.use(
+    cors({
+      origin: "http://localhost:5173", // frontend URL
+    })
+  ); // Enable CORS for all routes
+}
+
 app.use(rateLimiter); // Rate limiting middleware
 app.use("/api/posts", postRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist"))); //serve the frontend as a static file
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  });
+}
 
 connectToMongoDB()
   .then(() => {

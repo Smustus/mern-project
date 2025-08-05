@@ -1,0 +1,32 @@
+.comment-item.dark {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+.comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.comment-user {
+  font-weight: 600;
+  color: #2563eb;
+  font-size: 1.125rem;
+}
+.comment-user.dark {
+  color: #93c5fd;
+}
+.comment-user svg {
+  height: 1.25rem;
+  width: 1.25rem;
+  display: inline-block;
+  margin-right: 0.25rem;
+  color: #3b82f6;
+}
+.comment-content {
+  color: #374151;
+  line-height: 1.5;
+}
+.comment-content.dark {
+  color: #d1d5db;
+}

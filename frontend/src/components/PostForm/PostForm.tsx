@@ -1,31 +1,56 @@
-import React, { type FormEvent } from "react";
+import React, { useState, type FormEvent } from "react";
 import "./PostForm.css";
+import toast from "react-hot-toast";
+import { createPost } from "../../api/posts/fetchPost";
+import { useNavigate } from "react-router";
+import useAuth from "../../utility/useAuth";
 
-interface Post {
-  title: string;
-  slug: string;
-  published: boolean;
-  author: string;
-  content: string;
-  tags: string[];
-}
+const PostForm = () => {
+  const { user } = useAuth();
 
-// PostForm Component
-interface PostFormProps {
-  formData: Partial<Post>;
-  handleChange: (
+  const [formData, setFormData] = useState<Partial<Post>>({
+    title: "",
+    slug: "",
+    published: false,
+    author: user || "",
+    content: "",
+    tags: [],
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  handleSubmit: (e: FormEvent) => Promise<void>;
-  isLoading: boolean;
-}
+  ) => {
+    const { name, value } = e.target;
+    const type = (e.target as HTMLInputElement).type;
+    const checked = (e.target as HTMLInputElement).checked;
 
-const CreatePostForm: React.FC<PostFormProps> = ({
-  formData,
-  handleChange,
-  handleSubmit,
-  isLoading,
-}) => {
+    const val = type === "checkbox" ? checked : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "tags" ? value.split(",").map((tag) => tag.trim()) : val,
+    }));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      await createPost(formData);
+      toast.success("Post created!");
+      console.log("Post created successfully: ", formData);
+      navigate("/");
+    } catch (error) {
+      toast.error("Creation failed!");
+      console.error("Error adding post: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="post-form">
       <div className="form-group">
@@ -82,4 +107,4 @@ const CreatePostForm: React.FC<PostFormProps> = ({
   );
 };
 
-export default CreatePostForm;
+export default PostForm;

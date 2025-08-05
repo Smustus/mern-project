@@ -58,6 +58,7 @@ export const updatePost = async (req, res) => {
       author,
       content,
       tags,
+      comments,
     };
     const response = await Post.findByIdAndUpdate(req.params.id, updatedPost, {
       new: true,
@@ -91,9 +92,9 @@ export const deletePost = async (req, res) => {
 export const addCommentToPost = async (req, res) => {
   try {
     const postId = req.params.id;
-    const { userId, text } = req.body;
+    const { userId, title, content } = req.body;
 
-    if (!userId || !text) {
+    if (!userId || !content || !title) {
       return res
         .status(400)
         .json({ message: "User ID and comment text are required." });
@@ -101,7 +102,8 @@ export const addCommentToPost = async (req, res) => {
 
     const newComment = {
       user: userId,
-      text: text,
+      title: title,
+      content: content,
     };
 
     const updatedPost = await Post.findByIdAndUpdate(

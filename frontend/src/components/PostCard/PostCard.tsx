@@ -30,7 +30,7 @@ const PostCard: React.FC<Post> = (post) => {
       </p>
       <button
         onClick={(e) => handleDelete(e, post._id)}
-        className="post-card-delete-button"
+        className="delete-button"
       >
         Delete
       </button>

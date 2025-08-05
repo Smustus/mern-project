@@ -1,9 +1,15 @@
+import { useState } from "react";
 import { deletePost } from "../../api/posts/fetchPost";
 import "./PostDetails.css";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate, useRevalidator } from "react-router";
+import CommentForm from "../../components/CommentForm/CommentForm";
+import Comment from "../../components/Comment/Comment";
 
 const PostDetails = () => {
+  const [createComment, setCreateComment] = useState(false);
   const data = useLoaderData() as Post;
+  const navigate = useNavigate();
+  const revalidate = useRevalidator();
 
   const post: Post = {
     ...data,
@@ -28,7 +34,13 @@ const PostDetails = () => {
   ) => {
     e.preventDefault();
     if (!window.confirm("Are you sure you want to delete this post?")) return;
-    deletePost(id);
+    await deletePost(id);
+    revalidate.revalidate();
+    navigate("/");
+  };
+
+  const toggleCreateComment = () => {
+    setCreateComment(!createComment);
   };
 
   if (!post) {
@@ -44,7 +56,12 @@ const PostDetails = () => {
       <div className="post-card">
         {/* Post Title */}
         <h1 className="post-title">{post.title}</h1>
-        <button onClick={(e) => handleDelete(e, post._id)}>Delete</button>
+        <button
+          className="delete-button"
+          onClick={(e) => handleDelete(e, post._id)}
+        >
+          Delete
+        </button>
 
         {/* Post Meta Information */}
         <div className="post-meta">
@@ -143,52 +160,25 @@ const PostDetails = () => {
 
         {/* Comments Section */}
         <div className="comments-section">
-          <h3>Comments ({post.comments?.length || 0})</h3>
-          {post.comments && post.comments.length > 0 ? (
+          <section className="comments-section-header">
+            <h3>Comments ({post.comments?.length || 0})</h3>
+            <button className="delete-button" onClick={toggleCreateComment}>
+              {createComment ? "Close" : "Comment this post"}
+            </button>
+          </section>
+          {createComment && (
+            <CommentForm id={post._id} setCreateComment={setCreateComment} />
+          )}
+          {!createComment && post.comments && post.comments.length > 0 && (
             <div className="comments-list">
-              {post.comments.map((comment, index) => (
-                <div key={index} className="comment-item">
-                  <div className="comment-header">
-                    <span className="comment-user">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 inline-block mr-1 text-blue-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      {comment.user}
-                    </span>
-                    <span className="comment-votes">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mr-1 text-gray-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21c-.64-1.342-.217-2.907.574-3.951m-9.217-3.477a1.99 1.99 0 010-2.828V5a2 2 0 00-2-2h-1a2 2 0 00-2 2v13a2 2 0 002 2h1a2 2 0 002-2v-6.5l3.824-2.549M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21c-.64-1.342-.217-2.907.574-3.951"
-                        />
-                      </svg>
-                      {comment.votes} votes
-                    </span>
-                  </div>
-                  <p className="comment-content">{comment.content}</p>
+              {post.comments.map((comment) => (
+                <div key={comment._id} className="comment-item">
+                  <Comment comment={comment} />
                 </div>
               ))}
             </div>
-          ) : (
+          )}
+          {!createComment && post.comments && post.comments.length < 0 && (
             <p className="no-comments-message">
               No comments yet. Be the first to leave one!
             </p>

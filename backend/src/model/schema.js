@@ -2,22 +2,6 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-/* const commentSchema = new Schema(
-  {
-    user: {
-      type: Schema.Types.ObjectId,
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-); */
-
 const postSchema = new Schema(
   {
     title: {
@@ -39,8 +23,8 @@ const postSchema = new Schema(
     comments: [
       {
         user: String,
+        title: String,
         content: String,
-        votes: Number,
       },
     ],
   },

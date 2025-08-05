@@ -1,9 +1,3 @@
-interface Comment {
-  user: string;
-  content: string;
-  votes: number;
-}
-
 interface Post {
   _id: string;
   title: string;
@@ -15,4 +9,11 @@ interface Post {
   comments?: Comment[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+interface Comment {
+  _id?: string;
+  user: string;
+  content: string;
+  createdAt?: string;
 }
