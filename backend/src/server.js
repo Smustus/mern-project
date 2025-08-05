@@ -11,15 +11,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve();
+const FRONTEND_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://mern-test-project-ojk5.onrender.com/"
+    : "http://localhost:5173";
 
 app.use(express.json()); // Middleware to parse JSON bodies
-if (process.env.NODE_ENV === "development") {
-  app.use(
-    cors({
-      origin: "http://localhost:5173", // frontend URL
-    })
-  ); // Enable CORS for all routes
-}
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+  })
+); // Enable CORS for all routes
 
 app.use(rateLimiter); // Rate limiting middleware
 app.use("/api/posts", postRoutes);
