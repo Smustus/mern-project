@@ -5,16 +5,20 @@ import { createPost } from "../../api/posts/fetchPost";
 import { useNavigate } from "react-router";
 import useAuth from "../../utility/useAuth";
 
-const PostForm = () => {
+interface PostFormProps {
+  data?: Post;
+}
+
+const PostForm: React.FC<PostFormProps> = ({ data }) => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState<Partial<Post>>({
-    title: "",
-    slug: "",
+    title: data?.title || "",
+    slug: data?.slug || "",
     published: false,
     author: user || "",
-    content: "",
-    tags: [],
+    content: data?.content || "",
+    tags: data?.tags || [],
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,6 +41,20 @@ const PostForm = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (data) {
+      try {
+        setIsLoading(true);
+        await createPost(formData);
+        toast.success("Post updated!");
+        console.log("Post updated successfully: ", formData);
+        navigate("/");
+      } catch (error) {
+        toast.error("Updating failed!");
+        console.error("Error updating post: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
     try {
       setIsLoading(true);
       await createPost(formData);

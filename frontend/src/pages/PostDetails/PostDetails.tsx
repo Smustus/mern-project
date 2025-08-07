@@ -4,9 +4,11 @@ import "./PostDetails.css";
 import { useLoaderData, useNavigate, useRevalidator } from "react-router";
 import CommentForm from "../../components/CommentForm/CommentForm";
 import Comment from "../../components/Comment/Comment";
+import PostForm from "../../components/PostForm/PostForm";
 
 const PostDetails = () => {
   const [createComment, setCreateComment] = useState(false);
+  const [modifyPost, setModifyPost] = useState(false);
   const data = useLoaderData() as Post;
   const navigate = useNavigate();
   const revalidate = useRevalidator();
@@ -41,6 +43,10 @@ const PostDetails = () => {
 
   const toggleCreateComment = () => {
     setCreateComment(!createComment);
+  };
+
+  const handleModifyPost = () => {
+    setModifyPost(!modifyPost);
   };
 
   if (!post) {
@@ -140,9 +146,18 @@ const PostDetails = () => {
         </div>
 
         {/* Post Content */}
-        <div className="post-content">
-          <p>{post.content}</p>
-        </div>
+        {modifyPost ? (
+          <>
+            <PostForm data={data} />
+          </>
+        ) : (
+          <div className="post-content">
+            <p>{post.content}</p>
+            <button className="delete-button" onClick={handleModifyPost}>
+              Modify
+            </button>
+          </div>
+        )}
 
         {/* Tags Section */}
         {post.tags && post.tags.length > 0 && (
