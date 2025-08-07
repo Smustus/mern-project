@@ -47,7 +47,7 @@ export const updatePost = async (
 ): Promise<Post> => {
   try {
     const response = await fetch(`${BASE_URL}/posts/${postId}`, {
-      method: "PATCH",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },

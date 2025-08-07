@@ -1,15 +1,16 @@
 import React, { useState, type FormEvent } from "react";
 import "./PostForm.css";
 import toast from "react-hot-toast";
-import { createPost } from "../../api/posts/fetchPost";
-import { useNavigate } from "react-router";
+import { createPost, updatePost } from "../../api/posts/fetchPost";
+import { useNavigate, useRevalidator } from "react-router";
 import useAuth from "../../utility/useAuth";
 
 interface PostFormProps {
   data?: Post;
+  setEditPost?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ data }) => {
+const PostForm: React.FC<PostFormProps> = ({ data, setEditPost }) => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState<Partial<Post>>({
@@ -23,6 +24,7 @@ const PostForm: React.FC<PostFormProps> = ({ data }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const revalidate = useRevalidator();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,28 +46,30 @@ const PostForm: React.FC<PostFormProps> = ({ data }) => {
     if (data) {
       try {
         setIsLoading(true);
-        await createPost(formData);
+        await updatePost(data._id, formData);
         toast.success("Post updated!");
         console.log("Post updated successfully: ", formData);
-        navigate("/");
+        revalidate.revalidate();
+        if (setEditPost) setEditPost(false);
       } catch (error) {
         toast.error("Updating failed!");
         console.error("Error updating post: ", error);
       } finally {
         setIsLoading(false);
       }
-    }
-    try {
-      setIsLoading(true);
-      await createPost(formData);
-      toast.success("Post created!");
-      console.log("Post created successfully: ", formData);
-      navigate("/");
-    } catch (error) {
-      toast.error("Creation failed!");
-      console.error("Error adding post: ", error);
-    } finally {
-      setIsLoading(false);
+    } else {
+      try {
+        setIsLoading(true);
+        await createPost(formData);
+        toast.success("Post created!");
+        console.log("Post created successfully: ", formData);
+        navigate("/");
+      } catch (error) {
+        toast.error("Creation failed!");
+        console.error("Error adding post: ", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -118,9 +122,15 @@ const PostForm: React.FC<PostFormProps> = ({ data }) => {
         />
       </div>
 
-      <button type="submit" disabled={isLoading} className="submit-button">
-        {isLoading ? "...creating post" : "Create Post"}
-      </button>
+      {data ? (
+        <button type="submit" disabled={isLoading} className="submit-button">
+          {isLoading ? "...saving" : "Save"}
+        </button>
+      ) : (
+        <button type="submit" disabled={isLoading} className="submit-button">
+          {isLoading ? "...creating post" : "Create Post"}
+        </button>
+      )}
     </form>
   );
 };

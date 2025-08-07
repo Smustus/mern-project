@@ -8,7 +8,7 @@ import PostForm from "../../components/PostForm/PostForm";
 
 const PostDetails = () => {
   const [createComment, setCreateComment] = useState(false);
-  const [modifyPost, setModifyPost] = useState(false);
+  const [editPost, setEditPost] = useState(false);
   const data = useLoaderData() as Post;
   const navigate = useNavigate();
   const revalidate = useRevalidator();
@@ -45,8 +45,8 @@ const PostDetails = () => {
     setCreateComment(!createComment);
   };
 
-  const handleModifyPost = () => {
-    setModifyPost(!modifyPost);
+  const toggleEditPost = () => {
+    setEditPost(!editPost);
   };
 
   if (!post) {
@@ -67,6 +67,9 @@ const PostDetails = () => {
           onClick={(e) => handleDelete(e, post._id)}
         >
           Delete
+        </button>
+        <button className="delete-button" onClick={toggleEditPost}>
+          {editPost ? "Cancel" : "Edit"}
         </button>
 
         {/* Post Meta Information */}
@@ -146,16 +149,13 @@ const PostDetails = () => {
         </div>
 
         {/* Post Content */}
-        {modifyPost ? (
+        {editPost ? (
           <>
-            <PostForm data={data} />
+            <PostForm data={data} setEditPost={setEditPost} />
           </>
         ) : (
           <div className="post-content">
             <p>{post.content}</p>
-            <button className="delete-button" onClick={handleModifyPost}>
-              Modify
-            </button>
           </div>
         )}
 
@@ -178,7 +178,7 @@ const PostDetails = () => {
           <section className="comments-section-header">
             <h3>Comments ({post.comments?.length || 0})</h3>
             <button className="delete-button" onClick={toggleCreateComment}>
-              {createComment ? "Close" : "Comment this post"}
+              {createComment ? "Cancel" : "Comment this post"}
             </button>
           </section>
           {createComment && (
